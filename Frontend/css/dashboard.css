@@ -1,0 +1,192 @@
+/* ── dashboard.css — Cards de resumen, gráficos ── */
+
+/* Cards de KPI RF-015 */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.kpi-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+  border-top: 4px solid var(--blue-mid);
+}
+.kpi-card.green  { border-top-color: var(--green); }
+.kpi-card.red    { border-top-color: var(--red); }
+.kpi-card.yellow { border-top-color: var(--yellow); }
+
+.kpi-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+.kpi-value {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--gray-900);
+}
+.kpi-sub {
+  font-size: 0.78rem;
+  color: var(--gray-400);
+  margin-top: 4px;
+}
+
+/* Bienvenida RF-015 */
+.welcome-banner {
+  background: var(--blue-dark);
+  color: var(--white);
+  border-radius: var(--radius);
+  padding: 22px 28px;
+  margin-bottom: 24px;
+}
+.welcome-banner h1 {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  font-weight: 900;
+  margin-bottom: 6px;
+}
+.welcome-banner p {
+  opacity: 0.85;
+  font-size: 0.9rem;
+  max-width: 540px;
+}
+
+/* Features grid inicio */
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 20px;
+}
+.feature-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 18px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  box-shadow: var(--shadow);
+}
+.feature-icon { font-size: 2.2rem; flex-shrink: 0; }
+.feature-card h3 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: var(--gray-900);
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.feature-card p { font-size: 0.82rem; color: var(--gray-500); line-height: 1.5; }
+
+/* Sección de gráfico RF-017 */
+.chart-section {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+}
+.chart-section h3 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--gray-900);
+  margin-bottom: 16px;
+}
+
+/* Selector de mes RF-016 */
+.month-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.month-nav button {
+  padding: 6px 12px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  background: var(--white);
+  transition: all 0.15s;
+}
+.month-nav button:hover { border-color: var(--blue-mid); color: var(--blue-mid); }
+.month-nav span {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--gray-900);
+}
+
+/* Calendario RF-019 */
+.cal-box {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 16px;
+  flex: 1;
+  box-shadow: var(--shadow);
+}
+.cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.cal-header h4 { font-family: var(--font-display); font-weight: 800; font-size: 0.95rem; }
+.cal-nav {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: var(--gray-500);
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.cal-nav:hover { background: var(--gray-100); }
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  text-align: center;
+}
+.cal-day-name {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--gray-400);
+  padding: 4px 0;
+}
+.cal-day {
+  font-size: 0.8rem;
+  padding: 5px 2px;
+  border-radius: 50%;
+  color: var(--gray-700);
+  font-weight: 500;
+}
+.cal-day.other-month { color: var(--gray-300); }
+.cal-day.today       { background: var(--blue-mid); color: var(--white); font-weight: 700; }
+.cal-day.has-paid    { background: #dcfce7; color: #16a34a; font-weight: 700; }
+.cal-day.has-pending { background: #fef9c3; color: #a16207; font-weight: 700; }
+.cal-day.has-vencido { background: #fee2e2; color: #b91c1c; font-weight: 700; }
+
+.cal-legend {
+  display: flex;
+  gap: 20px;
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  box-shadow: var(--shadow);
+  align-items: center;
+  margin-top: 16px;
+}
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 600; }
+.legend-dot  { width: 12px; height: 12px; border-radius: 50%; }

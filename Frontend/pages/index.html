@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SYNCPAGO — Iniciar sesión</title>
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/auth.css">
+  <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
+</head>
+<body>
+
+<div class="auth-screen">
+  <div class="auth-inner">
+
+    <!-- Logo -->
+    <div class="auth-logo">SYNC<span>PAGO</span></div>
+
+    <!-- Tarjeta -->
+    <div class="auth-card">
+      <h2>Iniciar sesión</h2>
+
+      <!-- RF-002: correo + contraseña -->
+      <div class="field-group" id="fg-email">
+        <span class="icon">✉</span>
+        <input type="email" id="email" placeholder="Correo electrónico" autocomplete="email">
+        <p class="field-error">Ingresa un correo válido.</p>
+      </div>
+
+      <div class="field-group" id="fg-pass">
+        <span class="icon">🔒</span>
+        <input type="password" id="password" placeholder="Contraseña" autocomplete="current-password">
+        <p class="field-error">La contraseña es obligatoria.</p>
+      </div>
+
+      <!-- RF-003: enlace recuperación -->
+      <a class="forgot-link" href="forgot-password.html">¿Olvidaste tu contraseña?</a>
+
+      <button class="btn-primary" onclick="handleLogin()">Iniciar sesión</button>
+    </div>
+
+    <!-- RF-001: ir a registro -->
+    <div class="auth-link">
+      ¿No tienes cuenta? <a href="register.html">Regístrate</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="../js/auth.js"></script>
+<script>
+  function handleLogin() {
+    const email    = document.getElementById('email');
+    const password = document.getElementById('password');
+    let valid = true;
+
+    // RF-024: validación
+    if (!email.value || !email.value.includes('@')) {
+      document.getElementById('fg-email').classList.add('error');
+      valid = false;
+    } else {
+      document.getElementById('fg-email').classList.remove('error');
+    }
+
+    if (!password.value) {
+      document.getElementById('fg-pass').classList.add('error');
+      valid = false;
+    } else {
+      document.getElementById('fg-pass').classList.remove('error');
+    }
+
+    if (valid) {
+      // RF-002: llamada a auth.js → login(email, password)
+      login(email.value, password.value);
+    }
+  }
+</script>
+
+</body>
+</html>

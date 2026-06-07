@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SYNCPAGO — Dashboard</title>
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+
+<!-- RF-005: si no hay token → redirige a login (manejado en auth.js) -->
+
+<div class="app-layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-logo">SYNC<span>PAGO</span></div>
+    <div class="sidebar-nav">
+      <a class="nav-item active" href="dashboard.html">🏠 Inicio</a>
+      <a class="nav-item" href="gastos.html">📋 Mis Recibos</a>
+      <a class="nav-item" href="recordatorios.html">
+        🔔 Recordatorios
+        <span class="nav-badge" id="badge-rec">3</span>
+      </a>
+      <a class="nav-item" href="insights.html">📊 Estadísticas</a>
+      <a class="nav-item" href="historial.html">🕓 Historial</a>
+    </div>
+    <button class="nav-btn-add" onclick="window.location.href='gastos.html'">+ Agregar Recibo</button>
+  </nav>
+  <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <!-- MAIN -->
+  <div class="main-wrap">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <!-- RF-021: búsqueda -->
+        <input type="text" placeholder="Buscar Recibos..." id="global-search">
+      </div>
+      <div class="topbar-right">
+        <!-- RF-018: moneda -->
+        <select class="currency-select" id="currency-sel" onchange="setCurrency(this.value)">
+          <option value="COP">COP $</option>
+          <option value="USD">USD $</option>
+          <option value="EUR">EUR €</option>
+        </select>
+        <!-- RF-022: idioma -->
+        <div class="lang-switcher">
+          <button class="lang-btn active" onclick="setLang('es',this)">ES</button>
+          <button class="lang-btn" onclick="setLang('en',this)">EN</button>
+        </div>
+        <button class="notif-btn">
+          🔔
+          <span class="notif-dot"></span>
+        </button>
+        <div class="user-menu" onclick="toggleDropdown()">
+          <div class="avatar">👤</div>
+          <span id="username-display">Sofía M..</span>
+          <span>▾</span>
+          <!-- RF-004: cerrar sesión -->
+          <div class="user-dropdown" id="user-dropdown">
+            <div class="dd-header">
+              <div class="dd-email" id="email-display">sofia@gmail.com</div>
+              <div class="dd-avatar">👤</div>
+              <div class="dd-name" id="fullname-display">Sofía Martín</div>
+            </div>
+            <div class="dd-item manage">🛠 Gestionar cuenta</div>
+            <div class="dd-item logout" onclick="logout()">↩ Cerrar sesión</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- CONTENT -->
+    <main class="content">
+
+      <!-- Bienvenida RF-015 -->
+      <div class="welcome-banner">
+        <h1>¡Te damos la bienvenida, <span id="welcome-name">Sofía</span>!</h1>
+        <p>Aquí tienes un resumen de tus finanzas. Revisa tus próximos pagos y mantente al día.</p>
+      </div>
+
+      <!-- KPIs RF-015 -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Total este mes</div>
+          <div class="kpi-value" id="kpi-total">$0</div>
+          <div class="kpi-sub">en recibos registrados</div>
+        </div>
+        <div class="kpi-card green">
+          <div class="kpi-label">Pagados</div>
+          <div class="kpi-value" id="kpi-paid">0</div>
+          <div class="kpi-sub">obligaciones al día</div>
+        </div>
+        <div class="kpi-card yellow">
+          <div class="kpi-label">Pendientes</div>
+          <div class="kpi-value" id="kpi-pending">0</div>
+          <div class="kpi-sub">próximos a vencer</div>
+        </div>
+        <div class="kpi-card red">
+          <div class="kpi-label">Vencidos</div>
+          <div class="kpi-value" id="kpi-overdue">0</div>
+          <div class="kpi-sub">requieren atención</div>
+        </div>
+      </div>
+
+      <!-- Features -->
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📂</div>
+          <div>
+            <h3>1. Centraliza</h3>
+            <p>Reúne todos tus gastos (arriendo, luz, salud...) en un solo lugar seguro.</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📅</div>
+          <div>
+            <h3>2. Automatiza</h3>
+            <p>Configura ciclos de pago y recibe alertas automáticas antes del vencimiento.</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <div>
+            <h3>3. Notificaciones</h3>
+            <p>Alertas preventivas por WhatsApp para pagar a tiempo y evitar mora.</p>
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <div>
+            <h3>4. Historial</h3>
+            <p>Consulta el historial completo de tus consumos y analiza tu flujo de efectivo.</p>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="../js/auth.js"></script>
+<script src="../js/utils.js"></script>
+<script src="../js/i18n.js"></script>
+<script src="../js/dashboard.js"></script>
+<script>
+  // RF-005: guard
+  requireAuth();
+
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('overlay').classList.toggle('open');
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('overlay').classList.remove('open');
+  }
+  function toggleDropdown() {
+    document.getElementById('user-dropdown').classList.toggle('open');
+  }
+  document.addEventListener('click', e => {
+    const menu = document.querySelector('.user-menu');
+    const dd   = document.getElementById('user-dropdown');
+    if (dd && !menu.contains(e.target)) dd.classList.remove('open');
+  });
+</script>
+</body>
+</html>

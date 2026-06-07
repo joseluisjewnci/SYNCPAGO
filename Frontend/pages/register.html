@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SYNCPAGO — Crear cuenta</title>
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/auth.css">
+</head>
+<body>
+
+<div class="auth-screen">
+  <div class="auth-inner">
+
+    <div class="auth-logo">SYNC<span>PAGO</span></div>
+
+    <div class="auth-card">
+      <h2>Crear cuenta</h2>
+
+      <!-- RF-001: campos de registro -->
+      <div class="field-group" id="fg-name">
+        <span class="icon">👤</span>
+        <input type="text" id="name" placeholder="Nombre completo">
+        <p class="field-error">La Empresa/Servicio es obligatorio.</p>
+      </div>
+
+      <div class="field-group" id="fg-email">
+        <span class="icon">✉</span>
+        <input type="email" id="email" placeholder="Correo electrónico">
+        <p class="field-error">Ingresa un correo válido.</p>
+      </div>
+
+      <div class="field-group" id="fg-phone">
+        <span class="icon">📱</span>
+        <input type="tel" id="phone" placeholder="Celular (para WhatsApp)">
+        <p class="field-error">Ingresa un número válido.</p>
+      </div>
+
+      <div class="field-group" id="fg-pass">
+        <span class="icon">🔒</span>
+        <input type="password" id="password" placeholder="Contraseña (mín. 6 caracteres)">
+        <p class="field-error">La contraseña debe tener al menos 6 caracteres.</p>
+      </div>
+
+      <div class="field-group" id="fg-pass2">
+        <span class="icon">🔒</span>
+        <input type="password" id="password2" placeholder="Confirmar contraseña">
+        <p class="field-error">Las contraseñas no coinciden.</p>
+      </div>
+
+      <button class="btn-primary" onclick="handleRegister()">Registrarse</button>
+    </div>
+
+    <div class="auth-link">
+      ¿Ya tienes cuenta? <a href="index.html">Inicia sesión</a>
+    </div>
+
+  </div>
+</div>
+
+<script src="../js/auth.js"></script>
+<script>
+  function handleRegister() {
+    const name  = document.getElementById('name');
+    const email = document.getElementById('email');
+    const phone = document.getElementById('phone');
+    const pass  = document.getElementById('password');
+    const pass2 = document.getElementById('password2');
+    let valid = true;
+
+    // RF-024: validaciones
+    const setErr = (id, cond) => {
+      document.getElementById(id).classList.toggle('error', cond);
+      if (cond) valid = false;
+    };
+
+    setErr('fg-name',  !name.value.trim());
+    setErr('fg-email', !email.value.includes('@'));
+    setErr('fg-phone', !phone.value.trim());
+    setErr('fg-pass',  pass.value.length < 6);
+    setErr('fg-pass2', pass.value !== pass2.value);
+
+    if (valid) {
+      // RF-001: llamada a auth.js → register(...)
+      register(name.value, email.value, phone.value, pass.value);
+    }
+  }
+</script>
+
+</body>
+</html>

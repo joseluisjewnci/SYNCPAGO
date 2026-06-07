@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SYNCPAGO — Estadísticas</title>
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/layout.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <style>
+    /* Barra de distribución simple RF-017 */
+    .bar-item { margin-bottom: 14px; }
+    .bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.83rem;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-bottom: 5px;
+    }
+    .bar-track {
+      height: 10px;
+      background: var(--gray-100);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 20px;
+      transition: width 0.5s ease;
+    }
+
+    /* Totales RF-016 */
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .total-row:last-child { border-bottom: none; }
+    .total-row .label { font-size: 0.88rem; color: var(--gray-500); }
+    .total-row .value {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--gray-900);
+    }
+    .total-row .value.green { color: var(--green-dark); }
+    .total-row .value.red   { color: var(--red); }
+  </style>
+</head>
+<body>
+
+<div class="app-layout">
+
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-logo">SYNC<span>PAGO</span></div>
+    <div class="sidebar-nav">
+      <a class="nav-item" href="dashboard.html">🏠 Inicio</a>
+      <a class="nav-item" href="gastos.html">📋 Mis Recibos</a>
+      <a class="nav-item" href="recordatorios.html">🔔 Recordatorios</a>
+      <a class="nav-item active" href="insights.html">📊 Estadísticas</a>
+      <a class="nav-item" href="historial.html">🕓 Historial</a>
+    </div>
+    <button class="nav-btn-add" onclick="window.location.href='gastos.html'">+ Agregar Recibo</button>
+  </nav>
+  <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <div class="main-wrap">
+    <header class="topbar">
+      <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Buscar...">
+      </div>
+      <div class="topbar-right">
+        <!-- RF-018: selector de moneda -->
+        <select class="currency-select" id="currency-sel" onchange="setCurrency(this.value)">
+          <option value="COP">COP $</option>
+          <option value="USD">USD $</option>
+          <option value="EUR">EUR €</option>
+        </select>
+        <button class="notif-btn">🔔</button>
+        <div class="user-menu" onclick="toggleDropdown()">
+          <div class="avatar">👤</div>
+          <span>Sofía M.</span> ▾
+          <div class="user-dropdown" id="user-dropdown">
+            <div class="dd-header"><div class="dd-avatar">👤</div><div class="dd-name">Sofía Martín</div></div>
+            <div class="dd-item logout" onclick="logout()">↩ Cerrar sesión</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <div class="page-header">
+        <h2>Estadísticas financieras</h2>
+        <p>Analiza tus recibos mes a mes y toma mejores decisiones.</p>
+      </div>
+
+      <!-- RF-016: navegación de meses -->
+      <div class="month-nav">
+        <button onclick="changeMonth(-1)">← Anterior</button>
+        <span id="current-month">Junio 2026</span>
+        <button onclick="changeMonth(1)">Siguiente →</button>
+      </div>
+
+      <!-- RF-016: resumen mensual -->
+      <div class="chart-section" style="margin-bottom:20px;">
+        <h3>Resumen del mes</h3>
+        <div class="total-row">
+          <span class="label">Total registrado</span>
+          <span class="value" id="ins-total">$560.550</span>
+        </div>
+        <div class="total-row">
+          <span class="label">✅ Pagado</span>
+          <span class="value green" id="ins-paid">$197.900</span>
+        </div>
+        <div class="total-row">
+          <span class="label">⏳ Pendiente</span>
+          <span class="value" id="ins-pending">$313.050</span>
+        </div>
+        <div class="total-row">
+          <span class="label">⚠️ Vencido</span>
+          <span class="value red" id="ins-overdue">$93.000</span>
+        </div>
+      </div>
+
+      <!-- RF-017: distribución por categoría -->
+      <div class="chart-section">
+        <h3>📊 Distribución por categoría</h3>
+        <div id="bars-container">
+          <!-- Poblado por dashboard.js -->
+          <div class="bar-item">
+            <div class="bar-label"><span>🏠 Vivienda</span><span>$235.000 (42%)</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:42%;background:#3563e9;"></div></div>
+          </div>
+          <div class="bar-item">
+            <div class="bar-label"><span>💡 Servicios</span><span>$171.600 (31%)</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:31%;background:#22c55e;"></div></div>
+          </div>
+          <div class="bar-item">
+            <div class="bar-label"><span>🔥 Gas</span><span>$93.000 (17%)</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:17%;background:#ef4444;"></div></div>
+          </div>
+          <div class="bar-item">
+            <div class="bar-label"><span>📦 Otro</span><span>$60.950 (10%)</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:10%;background:#eab308;"></div></div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="../js/auth.js"></script>
+<script src="../js/utils.js"></script>
+<script src="../js/dashboard.js"></script>
+<script>
+  requireAuth();
+  let currentDate = new Date(2026, 5, 1); // Junio 2026
+
+  function changeMonth(dir) {
+    currentDate.setMonth(currentDate.getMonth() + dir);
+    const names = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+    document.getElementById('current-month').textContent =
+      names[currentDate.getMonth()] + ' ' + currentDate.getFullYear();
+  }
+
+  function setCurrency(val) { showToast('Moneda cambiada a ' + val); } // RF-018
+
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('overlay').classList.toggle('open');
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('overlay').classList.remove('open');
+  }
+  function toggleDropdown() {
+    document.getElementById('user-dropdown').classList.toggle('open');
+  }
+</script>
+</body>
+</html>
