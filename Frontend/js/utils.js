@@ -1,125 +1,103 @@
-// ======================
-// TOAST
-// ======================
-
 let toastTimer;
+
+// ====================
+// TOAST
+// ====================
 
 function showToast(msg) {
 
-  const t =
-    document.getElementById("toast");
+    const t =
+        document.getElementById("toast");
 
-  if (!t) return;
+    if (!t) return;
 
-  t.textContent = msg;
+    t.textContent = msg;
 
-  t.classList.add("show");
+    t.classList.add("show");
 
-  clearTimeout(toastTimer);
+    clearTimeout(toastTimer);
 
-  toastTimer = setTimeout(() => {
-
-    t.classList.remove("show");
-
-  }, 2800);
+    toastTimer = setTimeout(() => {
+        t.classList.remove("show");
+    }, 3000);
 }
 
 
-// ======================
+// ====================
 // MONEDA
-// ======================
+// ====================
 
-let currentCurrency =
-  localStorage.getItem("currency") || "COP";
+const exchangeRates = {
+    COP: 1,
+    USD: 4000,
+    EUR: 4500
+};
 
+function getCurrency() {
+
+    return (
+        localStorage.getItem("currency")
+        || "COP"
+    );
+}
 
 function setCurrency(currency) {
 
-  currentCurrency = currency;
+    localStorage.setItem(
+        "currency",
+        currency
+    );
 
-  localStorage.setItem(
-    "currency",
-    currency
-  );
+    showToast(
+        "Moneda cambiada a " +
+        currency
+    );
 
-  updateMoneyValues();
+    location.reload();
 }
-
-
-function convertCurrency(value) {
-
-  switch (currentCurrency) {
-
-    case "USD":
-      return value / 4000;
-
-    case "EUR":
-      return value / 4500;
-
-    default:
-      return value;
-  }
-}
-
 
 function formatMoney(value) {
 
-  return new Intl.NumberFormat(
-    "es-CO",
-    {
-      style: "currency",
-      currency: currentCurrency,
-      minimumFractionDigits: 0
+    const currency =
+        getCurrency();
+
+    let amount = value;
+
+    if (currency === "USD") {
+        amount = value / exchangeRates.USD;
     }
-  ).format(
-    convertCurrency(value)
-  );
+
+    if (currency === "EUR") {
+        amount = value / exchangeRates.EUR;
+    }
+
+    return new Intl.NumberFormat(
+        currency === "COP"
+            ? "es-CO"
+            : "en-US",
+        {
+            style: "currency",
+            currency: currency,
+            maximumFractionDigits: 2
+        }
+    ).format(amount);
 }
 
 
-// ======================
-// ACTUALIZAR MONTOS
-// ======================
-
-function updateMoneyValues() {
-
-  document
-    .querySelectorAll("[data-money]")
-    .forEach(el => {
-
-      const value =
-        Number(el.dataset.money);
-
-      el.textContent =
-        formatMoney(value);
-    });
-}
-
-
-// ======================
+// ====================
 // FECHAS
-// ======================
+// ====================
 
 function formatDate(str) {
 
-  return new Date(
-    str + "T12:00:00"
-  ).toLocaleDateString(
-    "es-CO",
-    {
-      day: "2-digit",
-      month: "short",
-      year: "numeric"
-    }
-  );
+    return new Date(
+        str + "T12:00:00"
+    ).toLocaleDateString(
+        "es-CO",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        }
+    );
 }
-
-
-// ======================
-// CARGA INICIAL
-// ======================
-
-document.addEventListener(
-  "DOMContentLoaded",
-  updateMoneyValues
-);

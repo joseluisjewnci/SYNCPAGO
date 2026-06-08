@@ -93,13 +93,20 @@
       <div class="topbar-right">
         <button class="notif-btn">🔔<span class="notif-dot"></span></button>
         <div class="user-menu" onclick="toggleDropdown()">
-          <div class="avatar">👤</div>
-          <span>Sofía M.</span> ▾
-          <div class="user-dropdown" id="user-dropdown">
-            <div class="dd-header"><div class="dd-avatar">👤</div><div class="dd-name">Sofía Martín</div></div>
-            <div class="dd-item logout" onclick="logout()">↩ Cerrar sesión</div>
-          </div>
+  <div class="avatar">👤</div>
+   <span id="username-display">Usuario</span> ▾
+
+    <div class="user-dropdown" id="user-dropdown">
+     <div class="dd-header">
+          <div class="dd-avatar">👤</div>
+        <div class="dd-name" id="fullname-display">Usuario</div>
+        <div class="dd-email" id="email-display"></div>
+      </div>
+
+    <div class="dd-item logout" onclick="logout()">
+      ↩ Cerrar sesión
         </div>
+       </div>
       </div>
     </header>
 
@@ -135,7 +142,7 @@
           <p>No compartiremos tu información con terceros.</p>
           <div class="perm-question">¿Deseas activar las notificaciones por WhatsApp?</div>
           <div class="radio-group">
-            <label class="radio-label sel-green">
+            <label class="radio-label">
               <input type="radio" name="wp" checked> Aceptar
             </label>
             <label class="radio-label">
@@ -158,7 +165,7 @@
             <label class="radio-label">
               <input type="radio" name="cal"> Aceptar
             </label>
-            <label class="radio-label sel-red">
+            <label class="radio-label">
               <input type="radio" name="cal" checked> Desactivar
             </label>
           </div>
@@ -261,6 +268,103 @@
   function toggleDropdown() {
     document.getElementById('user-dropdown').classList.toggle('open');
   }
+  </script>
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const user = JSON.parse(
+        localStorage.getItem("user") || "{}"
+    );
+
+    const nombre =
+        user.nombre ||
+        user.name ||
+        "Usuario";
+
+    const correo =
+        user.correo ||
+        user.email ||
+        "";
+
+    const username =
+        document.getElementById("username-display");
+
+    const fullname =
+        document.getElementById("fullname-display");
+
+    const email =
+        document.getElementById("email-display");
+
+    if (username) {
+        username.textContent = nombre;
+    }
+
+    if (fullname) {
+        fullname.textContent = nombre;
+    }
+
+    if (email) {
+        email.textContent = correo;
+    }
+
+});
+
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    document
+        .querySelectorAll('.radio-group')
+        .forEach(grupo => {
+
+            const radios =
+                grupo.querySelectorAll('input[type="radio"]');
+
+            function actualizarColores() {
+
+                radios.forEach(radio => {
+
+                    const label =
+                        radio.parentElement;
+
+                    label.classList.remove(
+                        "sel-green",
+                        "sel-red"
+                    );
+
+                    if (radio.checked) {
+
+                        if (
+                            label.textContent
+                            .includes("Aceptar")
+                        ) {
+                            label.classList.add(
+                                "sel-green"
+                            );
+                        } else {
+                            label.classList.add(
+                                "sel-red"
+                            );
+                        }
+
+                    }
+
+                });
+
+            }
+
+            radios.forEach(radio => {
+                radio.addEventListener(
+                    "change",
+                    actualizarColores
+                );
+            });
+
+            actualizarColores();
+
+        });
+
+});
 </script>
 </body>
 </html>

@@ -63,14 +63,14 @@
         </button>
         <div class="user-menu" onclick="toggleDropdown()">
           <div class="avatar">👤</div>
-          <span id="username-display">Sofía M..</span>
+          <span id="username-display">Usuario</span>
           <span>▾</span>
           <!-- RF-004: cerrar sesión -->
           <div class="user-dropdown" id="user-dropdown">
             <div class="dd-header">
-              <div class="dd-email" id="email-display">sofia@gmail.com</div>
+              <div class="dd-email" id="email-display"></div>
               <div class="dd-avatar">👤</div>
-              <div class="dd-name" id="fullname-display">Sofía Martín</div>
+              <div class="dd-name" id="fullname-display">Usuario</div>
             </div>
             <div class="dd-item manage">🛠 Gestionar cuenta</div>
             <div class="dd-item logout" onclick="logout()">↩ Cerrar sesión</div>
@@ -82,11 +82,18 @@
     <!-- CONTENT -->
     <main class="content">
 
-      <!-- Bienvenida RF-015 -->
-      <div class="welcome-banner">
-        <h1>¡Te damos la bienvenida, <span id="welcome-name">Sofía</span>!</h1>
-        <p>Aquí tienes un resumen de tus finanzas. Revisa tus próximos pagos y mantente al día.</p>
-      </div>
+     <!-- Bienvenida RF-015 -->
+  <div class="welcome-banner">
+    <h1>
+      ¡Te damos la bienvenida,
+     <span id="welcome-name">Usuario</span>!
+     </h1>
+
+   <p>
+      Aquí tienes un resumen de tus finanzas.
+      Revisa tus próximos pagos y mantente al día.
+    </p>
+  </div>
 
       <!-- KPIs RF-015 -->
       <div class="kpi-grid">
@@ -175,6 +182,24 @@
     const dd   = document.getElementById('user-dropdown');
     if (dd && !menu.contains(e.target)) dd.classList.remove('open');
   });
+</script>
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const currency =
+        localStorage.getItem("currency")
+        || "COP";
+
+    const selector =
+        document.getElementById("currency-sel");
+
+    if (selector) {
+        selector.value = currency;
+    }
+
+});
+
 </script>
 </body>
 </html>

@@ -1,9 +1,44 @@
-const usuario = {
-    nombre: "José Castillo",
-    correo: "jose@gmail.com"
-};
+document.addEventListener("DOMContentLoaded", () => {
 
-document.getElementById("username-display").textContent = usuario.nombre;
-document.getElementById("fullname-display").textContent = usuario.nombre;
-document.getElementById("email-display").textContent = usuario.correo;
-document.getElementById("welcome-name").textContent = usuario.nombre.split(" ")[0];
+    const user = JSON.parse(
+        localStorage.getItem("user") || "{}"
+    );
+
+    const nombre =
+        user.nombre ||
+        user.name ||
+        "Usuario";
+
+    const username =
+        document.getElementById("username-display");
+
+    const fullname =
+        document.getElementById("fullname-display");
+
+    const email =
+        document.getElementById("email-display");
+
+    const welcome =
+        document.getElementById("welcome-name");
+
+    if (username) {
+        username.textContent = nombre;
+    }
+
+    if (fullname) {
+        fullname.textContent = nombre;
+    }
+
+    if (email) {
+        email.textContent =
+            user.correo ||
+            user.email ||
+            "";
+    }
+
+    if (welcome) {
+        welcome.textContent =
+            nombre.split(" ")[0];
+    }
+
+});

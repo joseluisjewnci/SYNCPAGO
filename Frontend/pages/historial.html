@@ -37,22 +37,34 @@
       </div>
       <div class="topbar-right">
         <button class="notif-btn">🔔</button>
-        <div class="user-menu" onclick="toggleDropdown()">
-          <div class="avatar">👤</div>
-          <span>Sofía M.</span> ▾
-          <div class="user-dropdown" id="user-dropdown">
-            <div class="dd-header"><div class="dd-avatar">👤</div><div class="dd-name">Sofía Martín</div></div>
-            <div class="dd-item logout" onclick="logout()">↩ Cerrar sesión</div>
-          </div>
+       <div class="user-menu" onclick="toggleDropdown()">
+    <div class="avatar">👤</div>
+
+    <span id="username-display">Usuario</span> ▾
+
+    <div class="user-dropdown" id="user-dropdown">
+        <div class="dd-header">
+            <div class="dd-avatar">👤</div>
+
+            <div class="dd-name" id="fullname-display">
+                Usuario
+            </div>
+
+            <div class="dd-email" id="email-display"></div>
         </div>
-      </div>
+
+        <div class="dd-item logout" onclick="logout()">
+            ↩ Cerrar sesión
+        </div>
+    </div>
+</div>
     </header>
 
     <main class="content">
 
       <div class="page-header">
         <h2>Historial</h2>
-        <p>Consulta todos tus pagos y recibos registrados, incluyendo los eliminados.</p>
+        <p>Consulta el historial completo de tus recibos registrados.</p>
       </div>
 
       <!-- RF-021: Filtros avanzados -->
@@ -98,59 +110,44 @@
             <th>Empresa/Servicio</th>
             <th>Categoría</th>
             <th>Monto</th>
-            <th>Fecha límite</th>
+            <th>Fecha de vencimiento</th>
             <th>Estado</th>
           </tr>
         </thead>
         <tbody id="hist-tbody">
-          <!-- Datos de ejemplo -->
-          <tr>
-            <td><span class="service-cell"><span class="color-dot" style="background:#22c55e"></span>Arriendo</span></td>
-            <td>Vivienda</td>
-            <td>$800.000</td>
-            <td>01 Jun 2026</td>
-            <td><span class="badge badge-green">Pagado</span></td>
-          </tr>
-          <tr>
-            <td><span class="service-cell"><span class="color-dot" style="background:#3563e9"></span>Luz</span></td>
-            <td>Servicios</td>
-            <td>$120.500</td>
-            <td>15 Ago 2026</td>
-            <td><span class="badge badge-yellow">Pendiente</span></td>
-          </tr>
-          <tr>
-            <td><span class="service-cell"><span class="color-dot" style="background:#ef4444"></span>Gas</span></td>
-            <td>Servicios</td>
-            <td>$93.000</td>
-            <td>05 Mar 2026</td>
-            <td><span class="badge badge-red">Vencido</span></td>
-          </tr>
-          <tr>
-            <td><span class="service-cell"><span class="color-dot" style="background:#06b6d4"></span>Agua</span></td>
-            <td>Servicios</td>
-            <td>$53.500</td>
-            <td>18 Ago 2026</td>
-            <td><span class="badge badge-today">Hoy</span></td>
-          </tr>
-          <tr style="opacity:0.5;">
-            <!-- RF-009: soft delete — visible en historial -->
-            <td><span class="service-cell"><span class="color-dot" style="background:#94a3b8"></span>Netflix</span></td>
-            <td>Ocio</td>
-            <td>$27.900</td>
-            <td>10 May 2026</td>
-            <td><span class="badge" style="background:#f1f5f9;color:#64748b;">Eliminado</span></td>
-          </tr>
         </tbody>
       </table>
 
       <div class="pagination">
-        <span>Página 1 de 3</span>
-        <div class="page-btns">
-          <button class="page-btn" disabled>Anterior</button>
-          <span class="page-info">1 de 3</span>
-          <button class="page-btn">Siguiente</button>
-        </div>
-      </div>
+
+  <span id="hist-pag-info">
+    Página 1 de 1
+  </span>
+
+  <div class="page-btns">
+
+    <button
+      class="page-btn"
+      id="hist-prev"
+      disabled>
+      Anterior
+    </button>
+
+    <span
+      class="page-info"
+      id="hist-pag-num">
+      1 de 1
+    </span>
+
+    <button
+      class="page-btn"
+      id="hist-next">
+      Siguiente
+    </button>
+
+  </div>
+
+</div>
 
     </main>
   </div>
@@ -160,13 +157,10 @@
 
 <script src="../js/auth.js"></script>
 <script src="../js/utils.js"></script>
+<script src="../js/historial.js"></script>
 <script>
   requireAuth();
 
-  function filterHistorial() {
-    // RF-021: la lógica real estará en utils.js
-    console.log('Filtrando historial...');
-  }
 
   function toggleSidebar() {
     document.getElementById('sidebar').classList.toggle('open');
