@@ -1,51 +1,158 @@
-// auth.js — RF-001, RF-002, RF-003, RF-004, RF-005
+// ======================
+// LOGIN
+// ======================
 
-// RF-002: Simula login y guarda token JWT
-function login(email, password) {
-  // Aquí va la llamada real al backend:
-  // fetch('/api/auth/login', { method:'POST', body: JSON.stringify({email, password}) })
-  const fakeToken = 'jwt-token-' + btoa(email);
-  const fakeUser  = { name: email.split('@')[0], email };
-  localStorage.setItem('token', fakeToken);
-  localStorage.setItem('user',  JSON.stringify(fakeUser));
-  window.location.href = 'dashboard.html';
+async function login(email, password) {
+
+  try {
+
+    const response = await fetch(
+      "http://127.0.0.1:8000/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          correo: email,
+          password: password
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!data.success) {
+      alert(data.mensaje);
+      return;
+    }
+
+    localStorage.setItem(
+      "token",
+      "usuario-autenticado"
+    );
+
+    localStorage.setItem(
+      "user",
+      JSON.stringify(data.usuario)
+    );
+
+    window.location.href = "dashboard.html";
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert("Error al iniciar sesión");
+  }
 }
 
-// RF-001: Simula registro
-function register(name, email, phone, password) {
-  const fakeToken = 'jwt-token-' + btoa(email);
-  const user = { name, email, phone };
-  localStorage.setItem('token', fakeToken);
-  localStorage.setItem('user',  JSON.stringify(user));
-  window.location.href = 'dashboard.html';
+
+// ======================
+// REGISTRO
+// ======================
+
+async function register(name, email, phone, password) {
+
+  try {
+
+    const response = await fetch(
+      "http://127.0.0.1:8000/register",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          nombre: name,
+          correo: email,
+          password: password
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    alert(data.mensaje);
+
+    if (data.success) {
+      window.location.href = "index.html";
+    }
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert("Error al registrar usuario");
+  }
 }
 
-// RF-003: Recuperar contraseña
-function forgotPassword(email) {
-  console.log('Enviando enlace de recuperación a:', email);
-  // fetch('/api/auth/forgot-password', { method:'POST', body: JSON.stringify({email}) })
-}
 
-// RF-004: Cerrar sesión — invalida token en cliente
+// ======================
+// LOGOUT
+// ======================
+
 function logout() {
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
-  window.location.href = 'index.html';
+
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+
+  window.location.href = "index.html";
 }
 
-// RF-005: Guard — redirige si no hay token
+
+// ======================
+// AUTH GUARD
+// ======================
+
 function requireAuth() {
-  const token = localStorage.getItem('token');
+
+  const token = localStorage.getItem("token");
+
   if (!token) {
-    window.location.href = 'index.html';
-  } else {
-    // Cargar datos de usuario en la UI
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    const nameEl = document.getElementById('username-display');
-    const welEl  = document.getElementById('welcome-name');
-    const emailEl = document.getElementById('email-display');
-    if (nameEl)  nameEl.textContent  = user.name || 'Usuario';
-    if (welEl)   welEl.textContent   = user.name || 'Usuario';
-    if (emailEl) emailEl.textContent = user.email || '';
+    window.location.href = "index.html";
+    return;
+  }
+
+  const user = JSON.parse(
+    localStorage.getItem("user") || "{}"
+  );
+
+  const nombre =
+    user.nombre ||
+    user.name ||
+    "Usuario";
+
+  const correo =
+    user.correo ||
+    user.email ||
+    "";
+
+  const username =
+    document.getElementById("username-display");
+
+  const welcome =
+    document.getElementById("welcome-name");
+
+  const email =
+    document.getElementById("email-display");
+
+  const fullname =
+    document.getElementById("fullname-display");
+
+  if (username) {
+    username.textContent = nombre;
+  }
+
+  if (welcome) {
+    welcome.textContent = nombre;
+  }
+
+  if (email) {
+    email.textContent = correo;
+  }
+
+  if (fullname) {
+    fullname.textContent = nombre;
   }
 }
